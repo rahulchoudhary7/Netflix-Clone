@@ -1,6 +1,8 @@
 import axios from "./axios";
 import React, {useState, useEffect,} from 'react';
 import "./Row.css";
+import YouTube from "react-youtube";
+import movieTrailer from "movie-trailer";
 
 function Row({title, fetchUrl, isLargeRow = false}) {
 
@@ -17,25 +19,54 @@ function Row({title, fetchUrl, isLargeRow = false}) {
         fetchData();
     }, [fetchUrl]);
 
+    const [trailerUrl, setTrailerUrl] = useState("")
+    const handleTrailer =(movie)=>{
+        if(trailerUrl){
+            setTrailerUrl("");
+        }
+        else{
+            movieTrailer(movie.name || "").then((url) =>{
+                const urlParams = new URLSearchParams(new URL(url).search)
+                setTrailerUrl(urlParams.get('v'));
+            }).catch(()=>{
+                alert('Temporarily unavailable')
+            })
+        }
+    }
+
+    const opts ={
+        height: "390",
+        width: "100%",
+        playerVar: {
+            autoplay:1
+        }
+    }
+
   return (
     <div className='row'>
         <h2>{title}</h2>
         <div className="row_posters">
                 {movies.map((movie) => (
-                    (isLargeRow && movie.poster_path) ||
-                    (!isLargeRow && movie.backdrop_path &&(
+                    // (isLargeRow && movie.poster_path) ||
+                    // (!isLargeRow && movie.backdrop_path) ? 
 
                 <img
+                onClick={()=> handleTrailer(movie)}
                 className={`row_poster ${isLargeRow && "row_posterLarge"}`}
                 key = {movie.id}
-                src={`${base_url}${
-                    isLargeRow ? movie.poster_path : movie.backdrop_path
+                src={
+                    `${base_url}${
+                    (isLargeRow && movie.poster_path) ? movie.poster_path 
+                    : (!isLargeRow && movie.backdrop_path) ? movie.backdrop_path 
+                    : "https://www.deviantart.com/sicariusftw/art/Death-Note-Movie-Poster-440275106"
                 }`} 
                 alt={movie.name} 
-                />
+                /> 
                 ))
-                ))}
+                }
+
         </div>
+        {trailerUrl && <YouTube videoId="{trailerUrl} opts = {opts}"/>}
     </div>
   )
 }
