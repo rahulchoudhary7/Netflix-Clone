@@ -1,14 +1,14 @@
 .banner{
     position: relative;
-    height: 448px;
+    height: 28rem;
     color: white;
     object-fit: contain;
 }
 
 .banner_contents{
-    margin-left: 30px;
-    padding-top: 140px;
-    height: 190px;
+    margin-left: 1.875rem;
+    padding-top: 8.75rem;
+    height: 11.875rem;
 }
 
 .banner_title{
@@ -23,7 +23,7 @@
     padding-top: 1rem;
     font-size: 0.8rem;
     max-width: 360px;
-    height: 80px;
+    height: 5rem;
 }
 
 .banner--fadeBottom{
